@@ -1,0 +1,11 @@
+[
+  verbose: true,
+  private: false,
+  skip: true,
+  router: "",
+  exit: "low",
+  format: "txt",
+  out: "",
+  ignore: [],
+  ignore_files: ["config/config.exs", "config/staging.exs", "config/prod.exs"]
+]

@@ -1,0 +1,12 @@
+{
+  "skip_files": [
+    "deps/",
+    "test/",
+    "lib/stonks.ex",
+    "lib/stonks/application.ex",
+    "lib/stonks/repo.ex",
+    "lib/stonks_web.ex",
+    "lib/stonks_web/endpoint.ex",
+    "lib/stonks_web/router.ex"
+  ]
+}

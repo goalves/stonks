@@ -1,11 +1,11 @@
 defmodule StonksWeb.Router do
   use StonksWeb, :router
 
-  pipeline :api do
-    plug :accepts, ["json"]
-  end
+  @version "v1"
 
-  scope "/api", StonksWeb do
+  pipeline :api, do: plug :accepts, ["json"]
+
+  scope "/api/#{@version}", StonksWeb do
     pipe_through :api
   end
 end
