@@ -3,7 +3,7 @@ defmodule StonksWeb.Router do
 
   @version "v1"
 
-  pipeline :api, do: plug :accepts, ["json"]
+  pipeline :api, do: plug(:accepts, ["json"])
 
   scope "/api/#{@version}", StonksWeb do
     pipe_through :api
