@@ -26,17 +26,17 @@ defmodule Stonks.Accounts.User do
   end
 
   @spec changeset(%__MODULE__{}, map()) :: Changeset.t()
-  def changeset(user = %__MODULE__{}, attrs) when is_map(attrs) do
+  def changeset(user = %__MODULE__{}, attributes) when is_map(attributes) do
     user
-    |> cast(attrs, @castable_fields)
+    |> cast(attributes, @castable_fields)
     |> validate_required(@required_fields)
     |> validate()
   end
 
   @spec create_changeset(map()) :: Changeset.t()
-  def create_changeset(attrs) when is_map(attrs) do
+  def create_changeset(attributes) when is_map(attributes) do
     %__MODULE__{}
-    |> cast(attrs, @castable_fields)
+    |> cast(attributes, @castable_fields)
     |> hash_password()
     |> validate_required(@create_required_fields)
     |> validate()

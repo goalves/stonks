@@ -24,9 +24,9 @@ defmodule Stonks.Business.Transaction do
   end
 
   @spec changeset(%__MODULE__{}, map()) :: Changeset.t()
-  def changeset(transaction = %__MODULE__{}, attrs) when is_map(attrs) do
+  def changeset(transaction = %__MODULE__{}, attributes) when is_map(attributes) do
     transaction
-    |> cast(attrs, @fields)
+    |> cast(attributes, @fields)
     |> validate_required(@required_fields)
     |> validate()
     |> assoc_constraint(:origin_user)
@@ -41,18 +41,6 @@ defmodule Stonks.Business.Transaction do
     |> validate_type_for_transaction()
     |> validate_accounts()
   end
-
-  @spec validate_accounts(Changeset.t()) :: Changeset.t()
-  defp validate_accounts(changeset = %Changeset{valid?: true}) do
-    origin_user = get_field(changeset, :origin_user_id)
-    destination_user = get_field(changeset, :destination_user_id)
-
-    if origin_user != destination_user,
-      do: changeset,
-      else: add_error(changeset, :destination_user, "cannot be the same as the origin account")
-  end
-
-  defp validate_accounts(changeset = %Changeset{}), do: changeset
 
   @spec validate_type_for_transaction(Changeset.t()) :: Changeset.t()
   defp validate_type_for_transaction(changeset = %Changeset{valid?: true}) do
@@ -73,4 +61,16 @@ defmodule Stonks.Business.Transaction do
        do: add_error(changeset, :destination_user, "needs to be set on transfers")
 
   defp validate_transaction(_, changeset = %Changeset{}), do: changeset
+
+  @spec validate_accounts(Changeset.t()) :: Changeset.t()
+  defp validate_accounts(changeset = %Changeset{valid?: true}) do
+    origin_user = get_field(changeset, :origin_user_id)
+    destination_user = get_field(changeset, :destination_user_id)
+
+    if origin_user != destination_user,
+      do: changeset,
+      else: add_error(changeset, :destination_user, "cannot be the same as the origin account")
+  end
+
+  defp validate_accounts(changeset = %Changeset{}), do: changeset
 end

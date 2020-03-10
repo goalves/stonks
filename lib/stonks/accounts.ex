@@ -7,17 +7,17 @@ defmodule Stonks.Accounts do
   @type user_change_response :: {:ok, %User{}} | {:error, Changeset.t()}
 
   @spec create_user(map()) :: user_change_response
-  def create_user(attrs \\ %{}) do
-    attrs
+  def create_user(attributes \\ %{}) do
+    attributes
     |> User.create_changeset()
     |> Repo.insert()
   end
 
   @spec update_user(binary(), map()) :: user_change_response
-  def update_user(user_id, attrs \\ %{}) do
+  def update_user(user_id, attributes \\ %{}) do
     Multi.new()
     |> Multi.run(:fetch, fn _, _ -> get_user(user_id) end)
-    |> Multi.update(:update, fn %{fetch: user = %User{}} -> User.changeset(user, attrs) end)
+    |> Multi.update(:update, fn %{fetch: user = %User{}} -> User.changeset(user, attributes) end)
     |> Repo.transaction()
     |> case do
       {:ok, %{update: user = %User{}}} -> {:ok, user}
