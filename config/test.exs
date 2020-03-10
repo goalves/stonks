@@ -12,3 +12,7 @@ config :stonks, StonksWeb.Endpoint,
   server: false
 
 config :logger, level: :warn
+
+config :argon2_elixir,
+  t_cost: 1,
+  m_cost: 8

@@ -9,8 +9,7 @@ defmodule Stonks.DataCase do
       alias Repo
 
       import Ecto
-      import Ecto.Changeset
-      import Ecto.Query
+      import Ecto.{Changeset, Query}
       import Stonks.DataCase
     end
   end

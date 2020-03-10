@@ -7,6 +7,8 @@
     "lib/stonks/repo.ex",
     "lib/stonks_web.ex",
     "lib/stonks_web/endpoint.ex",
-    "lib/stonks_web/router.ex"
+    "lib/stonks_web/router.ex",
+    "lib/stonks_web/guardian/auth_error_handler.ex",
+    "lib/stonks_web/guardian/auth_pipeline.ex"
   ]
 }
