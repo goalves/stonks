@@ -3,6 +3,7 @@ defmodule Stonks.Accounts.User do
   import Ecto.Changeset
 
   alias Ecto.Changeset
+  alias Stonks.Business.Transaction
 
   @castable_fields [:username, :password]
   @required_fields [:balance, :username, :password_hash]
@@ -17,6 +18,9 @@ defmodule Stonks.Accounts.User do
     field :password, :string, virtual: true
     field :password_hash, :string
     field :username, :string
+
+    has_many(:origin_transactions, Transaction, foreign_key: :origin_user_id)
+    has_many(:destination_transactions, Transaction, foreign_key: :destination_user_id)
 
     timestamps()
   end
