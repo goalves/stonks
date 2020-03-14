@@ -3,7 +3,7 @@ defmodule Stonks.Mailer do
 
   @spec deliver(binary) :: {:ok, binary()} | {:error, :invalid_email}
   def deliver(text) when is_binary(text) do
-    Logger.info("Email sent.")
+    Logger.info("Email sent 📧")
     {:ok, text}
   end
 

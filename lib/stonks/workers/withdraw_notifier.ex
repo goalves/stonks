@@ -3,9 +3,9 @@ defmodule Stonks.Workers.WithdrawNotifier do
 
   require Logger
 
-  alias Stonks.{Mailer, Business}
-  alias Stonks.Business.Transaction
   alias Oban.Job
+  alias Stonks.{Business, Mailer}
+  alias Stonks.Business.Transaction
 
   @impl Oban.Worker
   @spec perform(any(), Job.t()) :: {:ok, atom()} | {:error, any}

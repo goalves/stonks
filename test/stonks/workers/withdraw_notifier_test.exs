@@ -4,8 +4,8 @@ defmodule Stonks.Workers.WithdrawNotifierTest do
   import ExUnit.CaptureLog
   import Stonks.Factory
 
-  alias Stonks.Workers.WithdrawNotifier
   alias Oban.Job
+  alias Stonks.Workers.WithdrawNotifier
 
   describe "perform/1" do
     test "generates an email" do
