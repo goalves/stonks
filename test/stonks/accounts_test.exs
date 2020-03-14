@@ -9,7 +9,7 @@ defmodule Stonks.AccountsTest do
   alias Stonks.Accounts.User
 
   describe "get_user/1" do
-    test "returns an the user with the given id" do
+    test "returns the user with the given id" do
       user = insert(:user)
       assert {:ok, fetch_user = %User{}} = Accounts.get_user(user.id)
       assert fetch_user.id == user.id
