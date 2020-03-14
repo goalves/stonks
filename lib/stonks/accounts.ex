@@ -14,7 +14,7 @@ defmodule Stonks.Accounts do
   end
 
   @spec update_user(binary(), map()) :: user_change_response
-  def update_user(user_id, attributes \\ %{}) do
+  def update_user(user_id, attributes) when is_binary(user_id) and is_map(attributes) do
     Multi.new()
     |> Multi.run(:fetch, fn _, _ -> get_user(user_id) end)
     |> Multi.update(:update, fn %{fetch: user = %User{}} -> User.changeset(user, attributes) end)
@@ -35,8 +35,8 @@ defmodule Stonks.Accounts do
     end
   end
 
-  @spec get_user_by_username(binary) :: user_response
-  def get_user_by_username(username) do
+  @spec get_user_by_username(binary()) :: user_response
+  def get_user_by_username(username) when is_binary(username) do
     User
     |> Repo.get_by(username: username)
     |> case do
