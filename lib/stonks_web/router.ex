@@ -14,11 +14,12 @@ defmodule StonksWeb.Router do
 
     resources "/users", UserController, only: [:create]
     post "/auth", AuthController, :sign_in
-  end
 
-  scope "/api/#{@version}", StonksWeb do
-    pipe_through [:api, :api_auth]
+    scope "/users/me" do
+      pipe_through :api_auth
 
-    get "/users/me", UserController, :show_me
+      get "/", UserController, :show_me
+      post "/transactions", TransactionController, :create, as: :users_me_transactions
+    end
   end
 end

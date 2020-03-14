@@ -8,6 +8,7 @@ defmodule Stonks.Accounts.User do
   @castable_fields [:username, :password]
   @required_fields [:balance, :username, :password_hash]
   @create_required_fields [:balance, :username, :password]
+  @balance_fields [:balance]
 
   @default_initial_balance 100_000
 
@@ -42,10 +43,19 @@ defmodule Stonks.Accounts.User do
     |> validate()
   end
 
-  @spec validate(Changeset.t()) :: Changeset.t()
-  defp validate(changeset = %Changeset{}) do
-    validate_number(changeset, :balance, greater_than_or_equal_to: 0)
+  @spec balance_changeset(%__MODULE__{}, integer()) :: Changeset.t()
+  def balance_changeset(user = %__MODULE__{}, balance) when is_integer(balance) do
+    changes = %{balance: balance}
+
+    user
+    |> cast(changes, @balance_fields)
+    |> validate_required(@balance_fields)
+    |> validate()
   end
+
+  @spec validate(Changeset.t()) :: Changeset.t()
+  defp validate(changeset = %Changeset{}),
+    do: validate_number(changeset, :balance, greater_than_or_equal_to: 0)
 
   @spec hash_password(Changeset.t()) :: Changeset.t()
   defp hash_password(changeset = %Changeset{valid?: true, changes: %{password: password}}) do

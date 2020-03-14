@@ -25,7 +25,14 @@ defmodule Stonks.Accounts do
     end
   end
 
-  @spec get_user(binary) :: user_response
+  @spec update_user_balance(%User{}, pos_integer()) :: user_change_response()
+  def update_user_balance(user = %User{}, amount) when amount >= 0 do
+    user
+    |> User.balance_changeset(amount)
+    |> Repo.update()
+  end
+
+  @spec get_user(binary()) :: user_response
   def get_user(id) when is_binary(id) do
     User
     |> Repo.get(id)

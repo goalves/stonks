@@ -37,7 +37,7 @@ defmodule Stonks.AccountsTest do
       %{user: insert(:user)}
     end
 
-    test "returns an updated user", %{user: user} do
+    test "returns an updated user when passing the id", %{user: user} do
       new_username = Internet.user_name()
       attributes = %{username: new_username}
 
