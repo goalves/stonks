@@ -2,8 +2,11 @@ defmodule Stonks.Application do
   use Application
 
   def start(_type, _args) do
+    oban_config = Application.get_env(:stonks, Oban)
+
     children = [
       Stonks.Repo,
+      {Oban, oban_config},
       StonksWeb.Endpoint
     ]
 

@@ -20,4 +20,9 @@ config :stonks, Stonks.Accounts.Guardian,
   issuer: "stonks",
   secret_key: "dYrNfpiOzVYrEuMEO6656zFwmzvOk2aEFgcR9+OpbAkhsH02w2clUnjALO2YlZI2"
 
+config :stonks, Oban,
+  repo: Stonks.Repo,
+  prune: {:maxlen, 10_000},
+  queues: [default: 30, importers: 30]
+
 import_config "#{Mix.env()}.exs"

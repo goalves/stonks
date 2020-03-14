@@ -49,6 +49,7 @@ defmodule Stonks.MixProject do
       {:phoenix, "~> 1.4.11"},
       {:plug_cowboy, "~> 2.0"},
       {:postgrex, ">= 0.0.0"},
+      {:oban, "~> 1.1"},
       {:sobelow, "~> 0.8", only: :dev}
     ]
   end

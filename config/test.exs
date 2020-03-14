@@ -16,3 +16,5 @@ config :logger, level: :warn
 config :argon2_elixir,
   t_cost: 1,
   m_cost: 8
+
+config :stonks, Oban, crontab: false, queues: false, prune: :disabled
