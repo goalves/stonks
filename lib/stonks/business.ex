@@ -4,10 +4,21 @@ defmodule Stonks.Business do
   alias Ecto.{Changeset, Multi}
   alias Stonks.Accounts.User
   alias Stonks.Business.Transaction
+  alias Stonks.Workers.WithdrawNotifier
   alias Stonks.{Accounts, Repo}
 
   @type transaction_response :: {:error, :transaction_does_not_exist} | {:ok, %Transaction{}}
   @type transaction_change_response :: {:ok, %Transaction{}} | {:error, Changeset.t()}
+
+  @spec get_transaction(binary()) :: transaction_response
+  def get_transaction(transaction_id) when is_binary(transaction_id) do
+    Transaction
+    |> Repo.get(transaction_id)
+    |> case do
+      transaction = %Transaction{} -> {:ok, transaction}
+      _ -> {:error, :transaction_does_not_exist}
+    end
+  end
 
   @spec create_transaction(map()) :: transaction_change_response
   def create_transaction(attributes) when is_map(attributes) do
