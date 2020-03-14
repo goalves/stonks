@@ -6,5 +6,5 @@ defmodule StonksWeb.UserView do
   def render("show.json", %{user: user}), do: %{data: render_one(user, UserView, "user.json")}
 
   def render("user.json", %{user: user}),
-    do: %{id: user.id, username: user.username, password_hash: user.password_hash, balance: user.balance}
+    do: %{id: user.id, username: user.username, balance: user.balance}
 end
