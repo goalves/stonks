@@ -58,7 +58,7 @@ defmodule StonksWeb.UserControllerTest do
       %{conn: conn, user: user}
     end
 
-    test "should return the user with the current authorization token", %{conn: conn, user: user} do
+    test "renders the user with the current authorization token", %{conn: conn, user: user} do
       response =
         conn
         |> get(Routes.user_path(conn, :show_me))
@@ -68,7 +68,7 @@ defmodule StonksWeb.UserControllerTest do
       assert response["data"]["id"] == user.id
     end
 
-    test "should return an error if the token is invalid", %{conn: conn} do
+    test "renders an error if the token is invalid", %{conn: conn} do
       conn = put_req_header(conn, "authorization", "Bearer: #{}")
 
       assert conn
@@ -80,7 +80,7 @@ defmodule StonksWeb.UserControllerTest do
              |> json_response(401) == %{"errors" => %{"detail" => "Unauthorized"}}
     end
 
-    test "should return an error if the user does not exist", %{conn: conn} do
+    test "renders an error if the user does not exist", %{conn: conn} do
       {:ok, token, _} = :user |> build() |> Guardian.encode_and_sign([])
       conn = put_req_header(conn, "authorization", "Bearer: #{token}")
 
