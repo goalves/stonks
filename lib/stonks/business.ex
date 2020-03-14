@@ -2,6 +2,7 @@ defmodule Stonks.Business do
   require Logger
 
   alias Ecto.{Changeset, Multi}
+  alias Oban.Job
   alias Stonks.Accounts.User
   alias Stonks.Business.Transaction
   alias Stonks.Workers.WithdrawNotifier
@@ -65,9 +66,9 @@ defmodule Stonks.Business do
 
   defp post_create_actions(transaction = %Transaction{type: "withdraw", id: id, amount: amount}) do
     user = transaction_user(transaction, :origin_user)
-
     Logger.info("Withdraw #{id} for #{user.username} with amount #{amount}")
-    {:ok, :action_performed}
+
+    with {:ok, _} <- notify_withdraw(transaction), do: {:ok, :action_performed}
   end
 
   defp post_create_actions(transaction = %Transaction{type: "transfer", id: id, amount: amount}) do
@@ -76,5 +77,12 @@ defmodule Stonks.Business do
 
     Logger.info("Transfer #{id} from #{origin_user.username} to #{destination_user.username} with amount #{amount}")
     {:ok, :action_performed}
+  end
+
+  @spec notify_withdraw(%Transaction{}) :: {:ok, Job.t()} | {:error, Changeset.t()}
+  defp notify_withdraw(transaction = %Transaction{}) do
+    %{transaction_id: transaction.id}
+    |> WithdrawNotifier.new()
+    |> Oban.insert()
   end
 end

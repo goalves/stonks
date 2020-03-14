@@ -38,6 +38,15 @@ defmodule Stonks.BusinessTest do
       assert User |> Repo.get(user.id) |> Map.get(:balance) == 0
     end
 
+    test "enqueues a job for sending an email for the user when creating a withdraw transaction" do
+      balance = :rand.uniform(@max_integer)
+      user = insert(:user, balance: balance)
+      attributes = params_for(:withdraw_transaction, origin_user: nil, origin_user_id: user.id, amount: balance)
+
+      assert {:ok, transaction = %Transaction{}} = Business.create_transaction(attributes)
+      assert_enqueued(worker: WithdrawNotifier, args: %{transaction_id: transaction.id})
+    end
+
     test "returns a created transfer transaction" do
       balance = :rand.uniform(@max_integer)
       user = insert(:user, balance: balance)
