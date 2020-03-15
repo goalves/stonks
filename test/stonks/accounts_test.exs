@@ -19,6 +19,17 @@ defmodule Stonks.AccountsTest do
       do: assert({:error, :user_does_not_exist} == Accounts.get_user(UUID.generate()))
   end
 
+  describe "get_user_by_email/1" do
+    test "returns the user with the given email" do
+      user = insert(:user)
+      assert {:ok, fetch_user = %User{}} = Accounts.get_user_by_email(user.email)
+      assert fetch_user.id == user.id
+    end
+
+    test "returns an error if the an user with the specified id does not exist",
+      do: assert({:error, :user_does_not_exist} == Accounts.get_user_by_email(Internet.email()))
+  end
+
   describe "create_user/1" do
     test "returns a created user" do
       attributes = :user |> params_for() |> Map.drop([:balance, :password_hash])
