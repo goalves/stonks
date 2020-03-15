@@ -3,14 +3,19 @@ defmodule Stonks.Workers.WithdrawNotifierTest do
 
   import ExUnit.CaptureLog
   import Stonks.Factory
+  import Swoosh.TestAssertions
 
   alias Oban.Job
+  alias Stonks.Mailer.WithdrawEmail
   alias Stonks.Workers.WithdrawNotifier
 
   describe "perform/1" do
     test "generates an email" do
       transaction = insert(:withdraw_transaction)
+      expected_email = WithdrawEmail.withdraw(transaction.origin_user, transaction)
+
       assert {:ok, text} = WithdrawNotifier.perform(%{"transaction_id" => transaction.id}, %Job{})
+      assert_email_sent(expected_email)
     end
 
     @tag :capture_log

@@ -13,7 +13,7 @@ defmodule StonksWeb do
   def view do
     quote do
       use Phoenix.View,
-        root: "lib/stonks_web/views",
+        root: "lib/stonks_web/templates",
         namespace: StonksWeb
 
       import Phoenix.Controller, only: [get_flash: 1, get_flash: 2, view_module: 1]

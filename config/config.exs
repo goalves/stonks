@@ -25,4 +25,8 @@ config :stonks, Oban,
   prune: {:maxlen, 10_000},
   queues: [default: 30, importers: 30]
 
+config :stonks, Stonks.Mailer,
+  adapter: Swoosh.Adapters.Sendgrid,
+  api_key: "SG.x.x"
+
 import_config "#{Mix.env()}.exs"

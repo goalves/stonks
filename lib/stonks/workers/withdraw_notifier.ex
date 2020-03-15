@@ -4,16 +4,21 @@ defmodule Stonks.Workers.WithdrawNotifier do
   require Logger
 
   alias Oban.Job
-  alias Stonks.{Business, Mailer}
+  alias Stonks.{Accounts, Business, Mailer}
+  alias Stonks.Accounts.User
   alias Stonks.Business.Transaction
+  alias Stonks.Mailer.WithdrawEmail
 
   @impl Oban.Worker
   @spec perform(any(), Job.t()) :: {:ok, atom()} | {:error, any}
   def perform(parameters = %{"transaction_id" => transaction_id}, job = %Job{}) when is_map(parameters) do
     Logger.info("Notifying user of withdraw for job #{inspect(job)}")
 
-    with {:ok, transaction = %Transaction{}} <- Business.get_transaction(transaction_id) do
-      Mailer.deliver("#{transaction.amount}")
+    with {:ok, transaction = %Transaction{}} <- Business.get_transaction(transaction_id),
+         {:ok, user = %User{}} <- Accounts.get_user(transaction.origin_user_id) do
+      user
+      |> WithdrawEmail.withdraw(transaction)
+      |> Mailer.deliver()
     end
   end
 

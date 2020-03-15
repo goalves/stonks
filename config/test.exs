@@ -18,3 +18,5 @@ config :argon2_elixir,
   m_cost: 8
 
 config :stonks, Oban, crontab: false, queues: false, prune: :disabled
+
+config :stonks, Stonks.Mailer, adapter: Swoosh.Adapters.Test

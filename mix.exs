@@ -43,12 +43,14 @@ defmodule Stonks.MixProject do
       {:excoveralls, "~> 0.10", only: :test},
       {:faker, "~> 0.13", only: :test},
       {:guardian, "~> 2.0"},
+      {:phoenix_swoosh, git: "https://github.com/swoosh/phoenix_swoosh"},
       {:jason, "~> 1.0"},
       {:phoenix_ecto, "~> 4.0"},
       {:phoenix_pubsub, "~> 1.1"},
       {:phoenix, "~> 1.4.11"},
       {:plug_cowboy, "~> 2.0"},
       {:postgrex, ">= 0.0.0"},
+      {:swoosh, "~> 0.24"},
       {:oban, "~> 1.1"},
       {:sobelow, "~> 0.8", only: :dev}
     ]
