@@ -76,6 +76,17 @@ defmodule Stonks.AccountsTest do
       do: assert({:error, %Changeset{}} = Accounts.create_operator(%{}))
   end
 
+  describe "get_operator/1" do
+    test "returns the operator with the given id" do
+      operator = insert(:operator)
+      assert {:ok, fetch_operator = %Operator{}} = Accounts.get_operator(operator.id)
+      assert fetch_operator.id == operator.id
+    end
+
+    test "returns an error if the an operator with the specified id does not exist",
+      do: assert({:error, :operator_does_not_exist} == Accounts.get_operator(UUID.generate()))
+  end
+
   describe "get_operator_by_email/1" do
     test "returns the operator with the given email" do
       operator = insert(:operator)

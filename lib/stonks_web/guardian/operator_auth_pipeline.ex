@@ -1,4 +1,4 @@
-defmodule StonksWeb.Guardian.AuthPipeline do
+defmodule StonksWeb.Guardian.OperatorAuthPipeline do
   alias Guardian.Plug.{EnsureAuthenticated, LoadResource, Pipeline, VerifyHeader}
   alias Stonks.Accounts.Guardian
   alias StonksWeb.Guardian.AuthErrorHandler
@@ -8,7 +8,7 @@ defmodule StonksWeb.Guardian.AuthPipeline do
     module: Guardian,
     error_handler: AuthErrorHandler
 
-  plug VerifyHeader
+  plug VerifyHeader, claims: %{"typ" => "operator_access"}
   plug EnsureAuthenticated
   plug LoadResource, allow_blank: false
 end

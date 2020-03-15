@@ -5,7 +5,7 @@ defmodule Stonks.Accounts do
 
   @type user_response :: {:error, :user_does_not_exist} | {:ok, %User{}}
   @type user_change_response :: {:ok, %User{}} | {:error, Changeset.t()}
-  @type operator_response :: {:error, :operator_does_not_exist} | {:ok, %User{}}
+  @type operator_response :: {:error, :operator_does_not_exist} | {:ok, %Operator{}}
   @type operator_change_response :: {:ok, %Operator{}} | {:error, Changeset.t()}
 
   @spec create_user(map()) :: user_change_response
@@ -65,6 +65,16 @@ defmodule Stonks.Accounts do
   def get_operator_by_email(email) when is_binary(email) do
     Operator
     |> Repo.get_by(email: email)
+    |> case do
+      operator = %Operator{} -> {:ok, operator}
+      _ -> {:error, :operator_does_not_exist}
+    end
+  end
+
+  @spec get_operator(binary()) :: operator_response
+  def get_operator(id) when is_binary(id) do
+    Operator
+    |> Repo.get(id)
     |> case do
       operator = %Operator{} -> {:ok, operator}
       _ -> {:error, :operator_does_not_exist}

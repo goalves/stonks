@@ -7,7 +7,7 @@ defmodule Stonks.Accounts.GuardianTest do
   alias Stonks.Accounts.Guardian
 
   describe "subject_for_token/2" do
-    test "returns the user_id of the encoded user" do
+    test "returns the user id of the encoded user" do
       user = build(:user)
       assert {:ok, user.id} == Guardian.subject_for_token(user, [])
     end
@@ -18,13 +18,26 @@ defmodule Stonks.Accounts.GuardianTest do
   end
 
   describe "resource_from_claims/2" do
-    test "returns the user_id if the parameters are valid and the user exists" do
+    test "returns the user id if the parameters are valid and the user exists" do
       user = insert(:user)
-      params = %{"sub" => user.id}
+      params = %{"sub" => user.id, "typ" => "user_access"}
       assert {:ok, user.id} == Guardian.resource_from_claims(params)
     end
 
-    test "returns an error if the user in the token does not exist",
-      do: assert({:error, :invalid_user_token} == Guardian.resource_from_claims(%{"sub" => UUID.generate()}))
+    test "returns the operator id if the parameters are valid and the operator exists" do
+      operator = insert(:operator)
+      params = %{"sub" => operator.id, "typ" => "operator_access"}
+      assert {:ok, operator.id} == Guardian.resource_from_claims(params)
+    end
+
+    test "returns an error if the user in the token does not exist" do
+      assert {:error, :invalid_token} ==
+               Guardian.resource_from_claims(%{"sub" => UUID.generate(), "typ" => "user_access"})
+    end
+
+    test "returns an error if the operator in the token does not exist" do
+      assert {:error, :invalid_token} ==
+               Guardian.resource_from_claims(%{"sub" => UUID.generate(), "typ" => "operator_access"})
+    end
   end
 end

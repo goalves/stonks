@@ -13,7 +13,7 @@ defmodule StonksWeb.TransactionControllerTest do
   describe "POST /users/me/transactions" do
     setup %{conn: conn} do
       user = insert(:user)
-      {:ok, token, _claims} = Guardian.encode_and_sign(user, [])
+      {:ok, token, _claims} = Guardian.encode_and_sign(user, %{}, token_type: "user_access")
       conn = put_req_header(conn, "authorization", "Bearer: #{token}")
 
       %{conn: conn, user: user}

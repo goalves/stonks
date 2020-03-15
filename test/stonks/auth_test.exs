@@ -17,6 +17,15 @@ defmodule Stonks.AuthTest do
       assert is_binary(token)
     end
 
+    test "returns a tuple with the signed operator_id and claims when password is valid" do
+      password = UUID.generate()
+      password_hash = Argon2.hash_pwd_salt(password)
+      operator = insert(:operator, password_hash: password_hash)
+
+      assert {:ok, token, _} = Auth.authenticate(operator.email, password)
+      assert is_binary(token)
+    end
+
     test "returns an error when user password is invalid" do
       password = UUID.generate()
       password_hash = Argon2.hash_pwd_salt(password)

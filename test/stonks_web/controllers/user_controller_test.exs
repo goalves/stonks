@@ -52,7 +52,7 @@ defmodule StonksWeb.UserControllerTest do
   describe "GET /users/me" do
     setup %{conn: conn} do
       user = insert(:user)
-      {:ok, token, _claims} = Guardian.encode_and_sign(user, [])
+      {:ok, token, _claims} = Guardian.encode_and_sign(user, %{}, token_type: "user_access")
       conn = put_req_header(conn, "authorization", "Bearer: #{token}")
 
       %{conn: conn, user: user}
@@ -81,7 +81,7 @@ defmodule StonksWeb.UserControllerTest do
     end
 
     test "renders an error if the user does not exist", %{conn: conn} do
-      {:ok, token, _} = :user |> build() |> Guardian.encode_and_sign([])
+      {:ok, token, _} = :user |> build() |> Guardian.encode_and_sign([], token_type: "user_access")
       conn = put_req_header(conn, "authorization", "Bearer: #{token}")
 
       assert conn
