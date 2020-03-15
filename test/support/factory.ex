@@ -3,7 +3,7 @@ defmodule Stonks.Factory do
 
   alias Ecto.UUID
   alias Faker.{Internet, Name}
-  alias Stonks.Accounts.User
+  alias Stonks.Accounts.{Operator, User}
   alias Stonks.Business.Transaction
 
   @max_integer 999_999_999
@@ -43,6 +43,14 @@ defmodule Stonks.Factory do
       destination_user: destination_user,
       destination_user_id: destination_user.id,
       amount: 500
+    }
+  end
+
+  def operator_factory do
+    %Operator{
+      password_hash: UUID.generate(),
+      password: UUID.generate(),
+      email: Internet.email()
     }
   end
 end

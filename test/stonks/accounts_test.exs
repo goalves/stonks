@@ -3,10 +3,10 @@ defmodule Stonks.AccountsTest do
 
   import Stonks.Factory
 
-  alias Ecto.UUID
-  alias Faker.Name
+  alias Ecto.{Changeset, UUID}
+  alias Faker.{Internet, Name}
   alias Stonks.Accounts
-  alias Stonks.Accounts.User
+  alias Stonks.Accounts.{Operator, User}
 
   describe "get_user/1" do
     test "returns the user with the given id" do
@@ -40,7 +40,7 @@ defmodule Stonks.AccountsTest do
     end
 
     test "returns an error when user attributes are invalid",
-      do: assert({:error, %Ecto.Changeset{}} = Accounts.create_user(%{}))
+      do: assert({:error, %Changeset{}} = Accounts.create_user(%{}))
   end
 
   describe "update_user/1" do
@@ -60,7 +60,30 @@ defmodule Stonks.AccountsTest do
       do: assert({:error, :user_does_not_exist} == Accounts.update_user(UUID.generate(), %{}))
 
     test("returns an error when user attributes are invalid", %{user: user},
-      do: assert({:error, %Ecto.Changeset{}} = Accounts.update_user(user.id, %{email: nil}))
+      do: assert({:error, %Changeset{}} = Accounts.update_user(user.id, %{email: nil}))
     )
+  end
+
+  describe "create_operator/1" do
+    test "returns a created operator" do
+      attributes = params_for(:operator)
+      assert {:ok, operator = %Operator{id: id}} = Accounts.create_operator(attributes)
+      refute is_nil(operator.password_hash)
+      refute Operator |> Repo.get(id) |> is_nil()
+    end
+
+    test "returns an error when user attributes are invalid",
+      do: assert({:error, %Changeset{}} = Accounts.create_operator(%{}))
+  end
+
+  describe "get_operator_by_email/1" do
+    test "returns the operator with the given email" do
+      operator = insert(:operator)
+      assert {:ok, fetch_operator = %Operator{}} = Accounts.get_operator_by_email(operator.email)
+      assert fetch_operator.id == operator.id
+    end
+
+    test "returns an error if the an operator with the specified id does not exist",
+      do: assert({:error, :operator_does_not_exist} == Accounts.get_operator_by_email(Internet.email()))
   end
 end

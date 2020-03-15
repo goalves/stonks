@@ -1,10 +1,12 @@
 defmodule Stonks.Accounts do
   alias Ecto.{Changeset, Multi}
-  alias Stonks.Accounts.User
+  alias Stonks.Accounts.{Operator, User}
   alias Stonks.Repo
 
   @type user_response :: {:error, :user_does_not_exist} | {:ok, %User{}}
   @type user_change_response :: {:ok, %User{}} | {:error, Changeset.t()}
+  @type operator_response :: {:error, :operator_does_not_exist} | {:ok, %User{}}
+  @type operator_change_response :: {:ok, %Operator{}} | {:error, Changeset.t()}
 
   @spec create_user(map()) :: user_change_response
   def create_user(attributes \\ %{}) do
@@ -49,6 +51,23 @@ defmodule Stonks.Accounts do
     |> case do
       user = %User{} -> {:ok, user}
       _ -> {:error, :user_does_not_exist}
+    end
+  end
+
+  @spec create_operator(map()) :: operator_change_response
+  def create_operator(attributes \\ %{}) do
+    %Operator{}
+    |> Operator.changeset(attributes)
+    |> Repo.insert()
+  end
+
+  @spec get_operator_by_email(binary()) :: operator_response
+  def get_operator_by_email(email) when is_binary(email) do
+    Operator
+    |> Repo.get_by(email: email)
+    |> case do
+      operator = %Operator{} -> {:ok, operator}
+      _ -> {:error, :operator_does_not_exist}
     end
   end
 end
