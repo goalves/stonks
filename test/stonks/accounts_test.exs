@@ -4,7 +4,7 @@ defmodule Stonks.AccountsTest do
   import Stonks.Factory
 
   alias Ecto.UUID
-  alias Faker.Internet
+  alias Faker.Name
   alias Stonks.Accounts
   alias Stonks.Accounts.User
 
@@ -38,18 +38,18 @@ defmodule Stonks.AccountsTest do
     end
 
     test "returns an updated user when passing the id", %{user: user} do
-      new_username = Internet.user_name()
-      attributes = %{username: new_username}
+      new_name = Name.name()
+      attributes = %{name: new_name}
 
       assert {:ok, user = %User{}} = Accounts.update_user(user.id, attributes)
-      assert user.username == new_username
+      assert user.name == new_name
     end
 
     test "returns an error when the user does not exist",
       do: assert({:error, :user_does_not_exist} == Accounts.update_user(UUID.generate(), %{}))
 
     test("returns an error when user attributes are invalid", %{user: user},
-      do: assert({:error, %Ecto.Changeset{}} = Accounts.update_user(user.id, %{username: nil}))
+      do: assert({:error, %Ecto.Changeset{}} = Accounts.update_user(user.id, %{email: nil}))
     )
   end
 end

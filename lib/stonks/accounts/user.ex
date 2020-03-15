@@ -5,11 +5,10 @@ defmodule Stonks.Accounts.User do
   alias Ecto.Changeset
   alias Stonks.Business.Transaction
 
-  @castable_fields [:username, :password]
-  @required_fields [:balance, :username, :password_hash]
-  @create_required_fields [:balance, :username, :password]
+  @castable_fields [:password, :name, :email]
+  @required_fields [:balance, :password_hash, :name, :email]
+  @create_required_fields [:balance, :password, :name, :email]
   @balance_fields [:balance]
-
   @default_initial_balance 100_000
 
   @primary_key {:id, :binary_id, autogenerate: true}
@@ -18,7 +17,8 @@ defmodule Stonks.Accounts.User do
     field :balance, :integer, default: @default_initial_balance
     field :password, :string, virtual: true
     field :password_hash, :string
-    field :username, :string
+    field :name, :string
+    field :email, :string
 
     has_many(:origin_transactions, Transaction, foreign_key: :origin_user_id)
     has_many(:destination_transactions, Transaction, foreign_key: :destination_user_id)
@@ -54,8 +54,12 @@ defmodule Stonks.Accounts.User do
   end
 
   @spec validate(Changeset.t()) :: Changeset.t()
-  defp validate(changeset = %Changeset{}),
-    do: validate_number(changeset, :balance, greater_than_or_equal_to: 0)
+  defp validate(changeset = %Changeset{}) do
+    changeset
+    |> validate_number(:balance, greater_than_or_equal_to: 0)
+    |> validate_format(:email, ~r/@/)
+    |> unique_constraint(:email)
+  end
 
   @spec hash_password(Changeset.t()) :: Changeset.t()
   defp hash_password(changeset = %Changeset{valid?: true, changes: %{password: password}}) do

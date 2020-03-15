@@ -2,7 +2,7 @@ defmodule Stonks.Factory do
   use ExMachina.Ecto, repo: Stonks.Repo
 
   alias Ecto.UUID
-  alias Faker.Internet
+  alias Faker.{Internet, Name}
   alias Stonks.Accounts.User
   alias Stonks.Business.Transaction
 
@@ -10,11 +10,12 @@ defmodule Stonks.Factory do
 
   def user_factory do
     %User{
-      username: Internet.user_name(),
       id: UUID.generate(),
       balance: :rand.uniform(@max_integer),
       password_hash: UUID.generate(),
-      password: UUID.generate()
+      password: UUID.generate(),
+      name: Name.name(),
+      email: Internet.email()
     }
   end
 

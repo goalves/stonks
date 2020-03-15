@@ -7,8 +7,8 @@ defmodule StonksWeb.AuthController do
   action_fallback StonksWeb.FallbackController
 
   @spec sign_in(Conn.t(), any()) :: Conn.t() | {:error, :bad_request}
-  def sign_in(conn = %Conn{}, %{"auth" => %{"username" => username, "password" => password}}) do
-    with {:ok, token, _} when is_binary(token) <- Auth.authenticate(username, password) do
+  def sign_in(conn = %Conn{}, %{"auth" => %{"email" => email, "password" => password}}) do
+    with {:ok, token, _} when is_binary(token) <- Auth.authenticate(email, password) do
       conn
       |> put_status(:created)
       |> render("token.json", token: token)

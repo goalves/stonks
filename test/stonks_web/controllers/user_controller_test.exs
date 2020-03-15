@@ -12,8 +12,8 @@ defmodule StonksWeb.UserControllerTest do
 
   describe "POST /users" do
     test "renders user when data is valid", %{conn: conn} do
-      username = Internet.user_name()
-      params = params_for(:user, username: username)
+      email = Internet.email()
+      params = params_for(:user, email: email)
 
       response =
         conn

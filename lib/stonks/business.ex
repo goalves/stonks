@@ -66,7 +66,7 @@ defmodule Stonks.Business do
 
   defp post_create_actions(transaction = %Transaction{type: "withdraw", id: id, amount: amount}) do
     user = transaction_user(transaction, :origin_user)
-    Logger.info("Withdraw #{id} for #{user.username} with amount #{amount}")
+    Logger.info("Withdraw #{id} for #{user.email} with amount #{amount}")
 
     with {:ok, _} <- notify_withdraw(transaction), do: {:ok, :action_performed}
   end
@@ -75,7 +75,7 @@ defmodule Stonks.Business do
     origin_user = transaction_user(transaction, :origin_user)
     destination_user = transaction_user(transaction, :destination_user)
 
-    Logger.info("Transfer #{id} from #{origin_user.username} to #{destination_user.username} with amount #{amount}")
+    Logger.info("Transfer #{id} from #{origin_user.email} to #{destination_user.email} with amount #{amount}")
     {:ok, :action_performed}
   end
 

@@ -13,7 +13,7 @@ defmodule Stonks.AuthTest do
       password_hash = Argon2.hash_pwd_salt(password)
       user = insert(:user, password_hash: password_hash)
 
-      assert {:ok, token, _} = Auth.authenticate(user.username, password)
+      assert {:ok, token, _} = Auth.authenticate(user.email, password)
       assert is_binary(token)
     end
 
@@ -23,12 +23,12 @@ defmodule Stonks.AuthTest do
       incorrect_password = UUID.generate()
       user = insert(:user, password_hash: password_hash)
 
-      assert {:error, :unauthorized} == Auth.authenticate(user.username, incorrect_password)
+      assert {:error, :unauthorized} == Auth.authenticate(user.email, incorrect_password)
     end
 
-    test "returns an error when the user with the specified username does not exist" do
-      username = Internet.user_name()
-      assert {:error, :unauthorized} == Auth.authenticate(username, UUID.generate())
+    test "returns an error when the user with the specified email does not exist" do
+      email = Internet.email()
+      assert {:error, :unauthorized} == Auth.authenticate(email, UUID.generate())
     end
   end
 end

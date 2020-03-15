@@ -42,10 +42,10 @@ defmodule Stonks.Accounts do
     end
   end
 
-  @spec get_user_by_username(binary()) :: user_response
-  def get_user_by_username(username) when is_binary(username) do
+  @spec get_user_by_email(binary()) :: user_response
+  def get_user_by_email(email) when is_binary(email) do
     User
-    |> Repo.get_by(username: username)
+    |> Repo.get_by(email: email)
     |> case do
       user = %User{} -> {:ok, user}
       _ -> {:error, :user_does_not_exist}

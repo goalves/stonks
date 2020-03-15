@@ -22,7 +22,12 @@ defmodule Stonks.Accounts.UserTest do
       invalid_attributes = %{}
       changeset = User.create_changeset(invalid_attributes)
       refute changeset.valid?
-      assert errors_on(changeset) == %{username: ["can't be blank"], password: ["can't be blank"]}
+
+      assert errors_on(changeset) == %{
+               name: ["can't be blank"],
+               email: ["can't be blank"],
+               password: ["can't be blank"]
+             }
     end
   end
 
@@ -47,7 +52,12 @@ defmodule Stonks.Accounts.UserTest do
       invalid_attributes = %{}
       changeset = User.changeset(%User{}, invalid_attributes)
       refute changeset.valid?
-      assert errors_on(changeset) == %{username: ["can't be blank"], password_hash: ["can't be blank"]}
+
+      assert errors_on(changeset) == %{
+               password_hash: ["can't be blank"],
+               name: ["can't be blank"],
+               email: ["can't be blank"]
+             }
     end
   end
 end

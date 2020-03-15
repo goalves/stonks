@@ -15,7 +15,7 @@ defmodule StonksWeb.AuthControllerTest do
       password_hash = Argon2.hash_pwd_salt(password)
       user = insert(:user, password_hash: password_hash)
 
-      params = %{username: user.username, password: password}
+      params = %{email: user.email, password: password}
 
       assert %{"token" => token} =
                conn
@@ -33,7 +33,7 @@ defmodule StonksWeb.AuthControllerTest do
       password_hash = Argon2.hash_pwd_salt(password)
       user = insert(:user, password_hash: password_hash)
 
-      params = %{username: user.username, password: invalid_password}
+      params = %{email: user.email, password: invalid_password}
 
       assert conn
              |> post(Routes.auth_path(conn, :sign_in), auth: params)
