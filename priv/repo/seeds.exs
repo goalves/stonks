@@ -1,11 +1,5 @@
-# Script for populating the database. You can run it as:
-#
-#     mix run priv/repo/seeds.exs
-#
-# Inside the script, you can read and write to any of your
-# repositories directly:
-#
-#     Stonks.Repo.insert!(%Stonks.SomeSchema{})
-#
-# We recommend using the bang functions (`insert!`, `update!`
-# and so on) as they will fail if something goes wrong.
+alias Stonks.Repo
+alias Stonks.Accounts.Operator
+
+operator_id = "b75b1571-072e-4cf3-a984-28dc1dde13ae"
+Repo.insert(%Operator{id: operator_id, email: "operator@stonks.co", password_hash: "hash"}, on_conflict: :nothing)
