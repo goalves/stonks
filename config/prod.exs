@@ -1,7 +1,8 @@
 use Mix.Config
 
 config :stonks, StonksWeb.Endpoint,
-  url: [host: "example.com", port: 80],
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  http: [port: {:system, "PORT"}],
+  url: [scheme: "https", host: "stonks.herokuapp.com", port: 443],
+  force_ssl: [rewrite_on: [:x_forwarded_proto]]
 
 config :logger, level: :info

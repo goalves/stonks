@@ -13,13 +13,23 @@ config :stonks, Stonks.Endpoint,
   http: [:inet6, port: String.to_integer(System.get_env("PORT") || "4000")],
   secret_key_base: secret_key_base
 
+database_url =
+  System.get_env("DATABASE_URL") ||
+    raise """
+    environment variable DATABASE_URL is missing.
+    """
+
+database_name =
+  System.get_env("DATABASE_NAME") ||
+    raise """
+    environment variable DATABASE_NAME is missing.
+    """
+
 config :stonks, Stonks.Repo,
-  username: System.fetch_env!("DATABASE_USERNAME"),
-  password: System.fetch_env!("DATABASE_PASSWORD"),
-  database: System.fetch_env!("DATABASE_NAME"),
   ssl: true,
-  url: System.fetch_env!("DATABASE_URL"),
-  pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
+  url: database_url,
+  pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
+  database: database_name
 
 config :stonks, Stonks.Guardian,
   issuer: "stonks",
