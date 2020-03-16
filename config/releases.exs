@@ -33,8 +33,8 @@ config :stonks, Stonks.Repo,
 
 config :stonks, Stonks.Guardian,
   issuer: "stonks",
-  secret_key: Sytem.fetch_env!("GUARDIAN_SECRET_KEY")
+  secret_key: System.fetch_env!("GUARDIAN_SECRET_KEY")
 
 config :stonks, Stonks.Mailer,
   adapter: Swoosh.Adapters.Sendgrid,
-  api_key: Sytem.fetch_env!("SENDGRID_API_KEY")
+  api_key: System.fetch_env!("SENDGRID_API_KEY")
