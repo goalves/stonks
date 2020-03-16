@@ -1,4 +1,6 @@
 defmodule Stonks.Business do
+  import Ecto.Query
+
   require Logger
 
   alias Ecto.{Changeset, Multi}
@@ -85,4 +87,18 @@ defmodule Stonks.Business do
     |> WithdrawNotifier.new()
     |> Oban.insert()
   end
+
+  @spec list_transactions_on_period(any(), any()) :: {:ok, [%Transaction{}]} | {:error, :invalid_period}
+  def list_transactions_on_period(start_period = %DateTime{}, end_period) do
+    query = transactions_period_query(start_period, end_period)
+    {:ok, Repo.all(query)}
+  end
+
+  def list_transactions_on_period(_, _), do: {:error, :invalid_periods}
+
+  defp transactions_period_query(start_period = %DateTime{}, nil),
+    do: from(t in Transaction, where: t.datetime >= ^start_period)
+
+  defp transactions_period_query(start_period = %DateTime{}, end_period = %DateTime{}),
+    do: from(t in Transaction, where: t.datetime >= ^start_period and t.datetime <= ^end_period)
 end

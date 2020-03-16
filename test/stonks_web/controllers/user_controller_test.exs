@@ -73,6 +73,7 @@ defmodule StonksWeb.UserControllerTest do
 
       assert conn
              |> get(Routes.user_path(conn, :show_me))
+             |> plug_doc(module: __MODULE__, action: :show_me)
              |> doc(
                description: "Show Current User using Invalid Token",
                operation_id: "show_current_user_with_invalid_token"
@@ -86,6 +87,7 @@ defmodule StonksWeb.UserControllerTest do
 
       assert conn
              |> get(Routes.user_path(conn, :show_me))
+             |> plug_doc(module: __MODULE__, action: :show_me)
              |> doc(description: "Show Current User when User does not Exist", operation_id: "show_current_user")
              |> json_response(401) == %{"errors" => %{"detail" => "Unauthorized"}}
     end

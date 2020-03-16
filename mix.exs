@@ -25,6 +25,7 @@ defmodule Stonks.MixProject do
   def application do
     [
       mod: {Stonks.Application, []},
+      application: [:timex],
       extra_applications: [:logger, :runtime_tools]
     ]
   end
@@ -52,6 +53,7 @@ defmodule Stonks.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:swoosh, "~> 0.24"},
       {:oban, "~> 1.1"},
+      {:timex, "~> 3.5"},
       {:sobelow, "~> 0.8", only: :dev}
     ]
   end

@@ -22,5 +22,11 @@ defmodule StonksWeb.Router do
       get "/", UserController, :show_me
       post "/transactions", TransactionController, :create, as: :users_me_transactions
     end
+
+    scope "/reports" do
+      pipe_through :operator_auth
+
+      post "/", ReportController, :create, as: :operator_reports
+    end
   end
 end

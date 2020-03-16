@@ -5,6 +5,7 @@ defmodule Stonks.Factory do
   alias Faker.{Internet, Name}
   alias Stonks.Accounts.{Operator, User}
   alias Stonks.Business.Transaction
+  alias Stonks.Backoffice.{Report, ReportFilter}
 
   @max_integer 999_999_999
 
@@ -51,6 +52,25 @@ defmodule Stonks.Factory do
       password_hash: UUID.generate(),
       password: UUID.generate(),
       email: Internet.email()
+    }
+  end
+
+  def report_factory do
+    now = DateTime.utc_now() |> DateTime.truncate(:second)
+
+    %Report{
+      start_datetime: now,
+      end_datetime: now,
+      total: 0
+    }
+  end
+
+  def report_filter_factory do
+    now = DateTime.utc_now() |> DateTime.truncate(:second)
+
+    %ReportFilter{
+      start_datetime: now,
+      end_datetime: now
     }
   end
 end

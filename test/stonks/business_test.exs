@@ -1,6 +1,7 @@
 defmodule Stonks.BusinessTest do
   use Stonks.DataCase, async: true
   use Oban.Testing, repo: Stonks.Repo
+  use Timex
 
   import Stonks.Factory
 
@@ -73,5 +74,43 @@ defmodule Stonks.BusinessTest do
 
     test "returns an error when transaction attributes are invalid",
       do: assert({:error, %Ecto.Changeset{}} = Business.create_transaction(%{}))
+  end
+
+  describe "list_transactions_on_period/2" do
+    test "should return all transactions after or equal to start date" do
+      base_datetime = DateTime.utc_now()
+
+      before_transaction = insert(:withdraw_transaction, datetime: Timex.shift(base_datetime, days: -1))
+      base_transaction = insert(:withdraw_transaction, datetime: base_datetime)
+      after_transaction = insert(:withdraw_transaction, datetime: Timex.shift(base_datetime, days: 1))
+
+      assert {:ok, list_of_transactions} = Business.list_transactions_on_period(base_datetime, nil)
+
+      assert Enum.count(list_of_transactions) == 2
+      list_of_transactions_ids = Enum.map(list_of_transactions, & &1.id)
+      assert base_transaction.id in list_of_transactions_ids
+      assert after_transaction.id in list_of_transactions_ids
+      refute before_transaction.id in list_of_transactions_ids
+    end
+
+    test "should return all transactions after or equal to start date and before end date" do
+      base_datetime = DateTime.utc_now()
+      end_base_datetime = DateTime.utc_now() |> Timex.shift(days: 1)
+
+      before_transaction = insert(:withdraw_transaction, datetime: base_datetime)
+      after_transaction = insert(:withdraw_transaction, datetime: Timex.shift(base_datetime, days: 1))
+      out_of_scope_transaction = insert(:withdraw_transaction, datetime: Timex.shift(base_datetime, days: 2))
+
+      assert {:ok, list_of_transactions} = Business.list_transactions_on_period(base_datetime, end_base_datetime)
+
+      assert Enum.count(list_of_transactions) == 2
+      list_of_transactions_ids = Enum.map(list_of_transactions, & &1.id)
+      assert before_transaction.id in list_of_transactions_ids
+      assert after_transaction.id in list_of_transactions_ids
+      refute out_of_scope_transaction.id in list_of_transactions_ids
+    end
+
+    test "should return an error if parameters are invalid",
+      do: assert({:error, :invalid_periods} == Business.list_transactions_on_period(nil, nil))
   end
 end

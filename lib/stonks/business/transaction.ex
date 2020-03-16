@@ -16,6 +16,7 @@ defmodule Stonks.Business.Transaction do
   schema "transactions" do
     field :amount, :integer
     field :type, :string
+    field :datetime, :utc_datetime
 
     belongs_to(:origin_user, User)
     belongs_to(:destination_user, User)
@@ -29,6 +30,7 @@ defmodule Stonks.Business.Transaction do
     |> cast(attributes, @fields)
     |> validate_required(@required_fields)
     |> validate()
+    |> put_timestamp()
     |> assoc_constraint(:origin_user)
     |> assoc_constraint(:destination_user)
   end
@@ -73,4 +75,12 @@ defmodule Stonks.Business.Transaction do
   end
 
   defp validate_accounts(changeset = %Changeset{}), do: changeset
+
+  @spec put_timestamp(Changeset.t()) :: Changeset.t()
+  defp put_timestamp(changeset = %Changeset{valid?: true}) do
+    now = DateTime.utc_now() |> DateTime.truncate(:second)
+    put_change(changeset, :datetime, now)
+  end
+
+  defp put_timestamp(changeset = %Changeset{}), do: changeset
 end
