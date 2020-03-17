@@ -20,3 +20,5 @@ config :logger, :console, format: "[$level] $message\n"
 config :phoenix, :stacktrace_depth, 20
 
 config :phoenix, :plug_init_mode, :runtime
+
+config :stonks, Stonks.Mailer, adapter: Swoosh.Adapters.Logger
