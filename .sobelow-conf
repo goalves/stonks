@@ -7,5 +7,5 @@
   format: "txt",
   out: "",
   ignore: [],
-  ignore_files: ["config/config.exs", "config/staging.exs", "config/prod.exs"]
+  ignore_files: ["config/config.exs", "config/staging.exs", "config/prod.exs", "lib/stonks/tasks/release_tasks.ex"]
 ]

@@ -10,8 +10,9 @@ defmodule Stonks.Tasks.ReleaseTasks do
 
   @seeds_file "seeds.exs"
 
-  alias Stonks.Repo
   alias Ecto.Migrator
+  alias Stonks.Repo
+
   require Logger
 
   @spec setup(any()) :: :ok
