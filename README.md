@@ -10,8 +10,7 @@ The application depends on multiple parts to work properly. Even though it is po
 
 - Elixir 1.10-otp22;
 - Erlang 22.1;
-- Postgres 11;
-- Docker.
+- Docker for having local Postgres 11;
 
 ## Setting Up Local Environment
 
@@ -25,6 +24,8 @@ mix ecto.setup
 ```
 
 To start the application, you need to run `mix phx.server`.
+
+It is important to notice that running locally uses development configuration, therefore emails are not sent.
 
 ## Running Tests and Static Code Analysis
 
@@ -57,3 +58,18 @@ aglio -i docs/documentation.md -o docs/documentation.html
 And you can check the latest available documentation acessing the `docs/documentation.html` file.
 
 Alternatively, you can use a docker container and mount the correct volumes, but that is better disected in Aglio documentation itself.
+
+## Building the Application
+
+To build the application the best option is to use `Releases`, you can build a release using `mix release`.
+
+It is possible to build a container the application using the provided Dockerfile using:
+
+`docker build .`
+
+However, to run it you would need to manually start the built container and bind it to the correct port.
+
+## Deployments
+
+Application is currently hosted on Heroku at https://stonks-bank.herokuapp.com/.
+Any push to the `production` branch will trigger a new deploy on heroku.
