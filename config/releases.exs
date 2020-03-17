@@ -1,7 +1,5 @@
 import Config
 
-config :stonks, Stonks.Endpoint, server: true
-
 secret_key_base =
   System.get_env("SECRET_KEY_BASE") ||
     raise """
@@ -9,9 +7,10 @@ secret_key_base =
     You can generate one by calling: mix phx.gen.secret
     """
 
-config :stonks, Stonks.Endpoint,
+config :stonks, StonksWeb.Endpoint,
   http: [:inet6, port: String.to_integer(System.get_env("PORT") || "4000")],
-  secret_key_base: secret_key_base
+  secret_key_base: secret_key_base,
+  server: true
 
 database_url =
   System.get_env("DATABASE_URL") ||
