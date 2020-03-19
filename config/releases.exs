@@ -30,7 +30,7 @@ config :stonks, Stonks.Repo,
   pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
   database: database_name
 
-config :stonks, Stonks.Guardian,
+config :stonks, Stonks.Accounts.Guardian,
   issuer: "stonks",
   secret_key: System.fetch_env!("GUARDIAN_SECRET_KEY")
 
